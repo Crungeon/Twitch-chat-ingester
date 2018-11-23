@@ -45,14 +45,13 @@ class TwitchIngester(SingleServerIRCBot):
         logger.debug('TCIBot.on_join')
         nickname = self._parse_nickname_from_twitch_user_id(event.source)
         self.viewers.append(nickname)
-        logger.debug(event)
 
     def on_pubmsg(self, connection, event):
         logger.debug('TCIBot.on_pubmsg')
         logger.debug('message = %r', event.arguments[0])
         self.es.index(
-            index="channels",
-            doc_type=self.channel[1:],
+            index=event.target[1:],
+            doc_type="chat",
             body={
                 "username": self._parse_nickname_from_twitch_user_id(event.source),
                 "timestamp": datetime.now(),
