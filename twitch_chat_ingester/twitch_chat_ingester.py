@@ -30,25 +30,25 @@ class TwitchIngester(SingleServerIRCBot):
     VERSION = '1.0.0'
 
     def __init__(self, host, port, nickname, password, channel):
-        logger.debug('VBot.__init__ (VERSION = %r)', self.VERSION)
+        logger.debug('TCIBot.__init__ (VERSION = %r)', self.VERSION)
         SingleServerIRCBot.__init__(self, [(host, port, password)], nickname, nickname)
         self.channel = channel
         self.viewers = []
         self.es = Elasticsearch("http://{}:{}".format(settings.ELK_HOST, settings.ELK_SEARCH_PORT))
-        logger.info("Elk Info: \n{}".format(self.es.info))
-
 
     def on_welcome(self, connection, event):
-        logger.debug('VBot.on_welcome')
-        connection.join(self.channel)
+        logger.debug('TCIBot.on_welcome')
+        for channel in self.channel:
+            connection.join(channel)
 
     def on_join(self, connection, event):
-        logger.debug('VBot.on_join')
+        logger.debug('TCIBot.on_join')
         nickname = self._parse_nickname_from_twitch_user_id(event.source)
         self.viewers.append(nickname)
+        logger.debug(event)
 
     def on_pubmsg(self, connection, event):
-        logger.debug('VBot.on_pubmsg')
+        logger.debug('TCIBot.on_pubmsg')
         logger.debug('message = %r', event.arguments[0])
         self.es.index(
             index="channels",
@@ -67,7 +67,7 @@ class TwitchIngester(SingleServerIRCBot):
 
 
 def main():
-    my_bot = TwitchIngester(settings.HOST, settings.PORT, settings.USERNAME, settings.PASSWORD, settings.CHANNEL)
+    my_bot = TwitchIngester(settings.HOST, settings.PORT, settings.USERNAME, settings.PASSWORD, settings.CHANNELS)
     my_bot.start()
 
 

@@ -6,7 +6,7 @@ Twitch Chat Ingester
 .. image:: https://img.shields.io/pypi/v/twitch_chat_ingester.svg
         :target: https://pypi.python.org/pypi/twitch_chat_ingester
 
-.. image:: https://img.shields.io/travis/thetides/twitch_chat_ingester.svg
+.. image:: https://img.shields.io/travis/crungeon/twitch_chat_ingester.svg
         :target: https://travis-ci.org/thetides/twitch_chat_ingester
 
 .. image:: https://readthedocs.org/projects/twitch-chat-ingester/badge/?version=latest
